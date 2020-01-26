@@ -1,17 +1,247 @@
 <!DOCTYPE html>
+<!--suppress ALL -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Ellis-Eynon Med. Holiday 2020</title>
+    <link rel="stylesheet" href="app.css">
 </head>
 <body>
 
 <div id="app">
-    
+
+    <div class="links">
+        <div v-for="proposal in proposals"
+             :class="{ selected: proposal === selected }"
+             @click="select(proposal)">
+            {{ proposal.title }}
+        </div>
+    </div>
+
+    <div class="banner-image" :class="selected.selector">
+        <div class="title">
+            {{ selected.title }}
+        </div>
+    </div>
+
+    <div class="things-to-do">
+        <div v-for="thing in selected.thingsToDo">
+            {{ thing }}
+        </div>
+    </div>
+
+    <div class="small-images">
+        <div class="images">
+            <img v-for="image in selected.smallImages" :src="image">
+        </div>
+    </div>
+
+    <div class="accommodation">
+        <div class="title">
+            Accommodation
+        </div>
+        <div class="images">
+            <div v-for="place in selected.placesToStay" class="image" :class="place.selector">
+                <div class="accommodation-text" @click="goTo(place.url)">
+                    <div class="accommodation-title">
+                        {{ place.title }}
+                    </div>
+                    <div class="accommodation-rate">
+                        {{ place.rate }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flights">
+        <div v-for="option in selected.flightOptions">
+            <div class="flight-description">
+                {{ option.description }}
+            </div>
+            <div class="flight-rate">
+                {{ option.rate }}
+            </div>
+        </div>
+    </div>
+
+    <div class="total-cost">
+        {{ selected.totalCost }}
+    </div>
+
 </div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script type="text/javascript">
+    let mallorca = {
+        title: "Mallorca",
+        selector: "mallorca",
+        smallImages: [
+            "palma-cathedral.jpeg",
+            "mallorca-beach.jpeg",
+            "mallorca-buildings.jpeg"
+        ],
+        placesToStay: [
+            {
+                title: "Sea view",
+                selector: "mallorca-butibalaire",
+                rate: "493 GBP/night",
+                url: "https://www.airbnb.co.uk/rooms/6700532?wl_source=list&wl_id=723654371&role=wishlist_owner&checkin=2020-07-04&checkout=2020-07-11&adults=4&children=0&infants=0&guests=4&source_impression_id=p3_1580061057_IUPAuDzSYSQ5BTRA"
+            },
+            {
+                title: "Mountains",
+                selector: "mallorca-mountains",
+                rate: "469 GBP/night",
+                url: "https://www.airbnb.co.uk/rooms/12282004?wl_source=list&wl_id=723654371&role=wishlist_owner&checkin=2020-07-04&checkout=2020-07-11&adults=4&children=0&infants=0&guests=4&source_impression_id=p3_1580061033_30ek%2B9iist5IFFWS"
+            },
+            {
+                title: "Beach house",
+                selector: "mallorca-beach-house",
+                rate: "273 GBP/night",
+                url: "https://www.airbnb.co.uk/rooms/24591469?wl_source=list&wl_id=723654371&role=wishlist_owner&checkin=2020-07-04&checkout=2020-07-11&adults=4&children=0&infants=0&guests=4&source_impression_id=p3_1580061037_07Ofpk3yL6JRfYc7"
+            }
+        ],
+        flightOptions: [
+            {
+                description: "BA from Stansted",
+                rate: "137 GBP pp"
+            },
+            {
+                description: "Easyjet from Gatwick",
+                rate: "157 GBP pp"
+            },
+            {
+                description: "Plus some cheaper for anti-social hours, Ryanair, etc",
+                rate: "As low as 111 GBP pp"
+            }
+        ],
+        thingsToDo: [
+            "Beaches",
+            "Hikes",
+            "Palma and the gothic cathedral",
+            "Pretty villages",
+            "Boat hire",
+            "Drive the scenic west coast"
+        ],
+        totalCost: "GBP 1,200 to 2,000 per couple"
+    };
+
+    let corsica = {
+        title: "Corsica",
+        selector: "corsica",
+        smallImages: [
+            "corsica-lighthouse.jpeg",
+            "corsica-sea.jpeg",
+            "corsica-aerial.jpeg",
+        ],
+        placesToStay: [
+            {
+                title: "Sea view",
+                selector: "mallorca-butibalaire",
+                rate: "493 GBP/night",
+                url: "https://www.airbnb.co.uk/rooms/6700532?wl_source=list&wl_id=723654371&role=wishlist_owner&checkin=2020-07-04&checkout=2020-07-11&adults=4&children=0&infants=0&guests=4&source_impression_id=p3_1580061057_IUPAuDzSYSQ5BTRA"
+            },
+            {
+                title: "Mountains",
+                selector: "mallorca-mountains",
+                rate: "469 GBP/night",
+                url: "https://www.airbnb.co.uk/rooms/12282004?wl_source=list&wl_id=723654371&role=wishlist_owner&checkin=2020-07-04&checkout=2020-07-11&adults=4&children=0&infants=0&guests=4&source_impression_id=p3_1580061033_30ek%2B9iist5IFFWS"
+            },
+            {
+                title: "Beach house",
+                selector: "mallorca-beach-house",
+                rate: "273 GBP/night",
+                url: "https://www.airbnb.co.uk/rooms/24591469?wl_source=list&wl_id=723654371&role=wishlist_owner&checkin=2020-07-04&checkout=2020-07-11&adults=4&children=0&infants=0&guests=4&source_impression_id=p3_1580061037_07Ofpk3yL6JRfYc7"
+            }
+        ],
+        flightOptions: [
+            {
+                description: "BA from Heathrow to Bastia",
+                rate: "240 GBP pp"
+            }
+        ],
+        totalCost: "480 per couple",
+        thingsToDo: [
+            "Sample Corsican charcuterie",
+            "Beaches",
+            "Vineyard visits",
+            "Hilltop villages",
+            "Hikes",
+            "Boat trips"
+        ]
+    };
+
+    let croatia = {
+        title: "Hvar",
+        selector: "croatia",
+        smallImages: [
+            "korcula.jpeg",
+            "croatia-sea.jpeg",
+            "hvar-harbour.jpeg",
+        ],
+        placesToStay: [
+            {
+                title: "Private pool",
+                selector: "hvar-jelsa-villa",
+                rate: "397 GBP/night",
+                url: "https://www.airbnb.co.uk/rooms/6329040?wl_source=list&wl_id=723357045&role=wishlist_owner&checkin=2020-07-05&checkout=2020-07-12&adults=4&children=0&infants=0&guests=4&source_impression_id=p3_1580064197_PJd8Xt632bODMdaS"
+            },
+            {
+                title: "Cosy with sea view",
+                selector: "hvar-robinson",
+                rate: "293 GBP/night",
+                url: "https://www.airbnb.co.uk/rooms/2350056?adults=4&check_in=2020-07-04&check_out=2020-07-11&poi_place_id=394107&source_impression_id=p3_1580064431_E9vjvO6MFD2MgXVc"
+            },
+            {
+                title: "Apartment with terrace",
+                selector: "hvar-german",
+                rate: "185 GBP/night",
+                url: "https://www.airbnb.co.uk/rooms/23230023?adults=4&check_in=2020-07-04&check_out=2020-07-11&poi_place_id=394107&source_impression_id=p3_1580064567_i5bP5DxCjrqBE8rv"
+            }
+        ],
+        flightOptions: [
+            {
+                description: "Norwegian LGW to Split",
+                rate: "170 GBP pp"
+            },
+            {
+                description: "Easyjet LGW to Split",
+                rate: "212 GBP pp"
+            }
+        ],
+        thingsToDo: [
+            "Visit Vis and Korcula",
+            "Pakleni islands",
+            "Sea kayaking",
+            "Explore Hvar and Stari Grad towns",
+            "Wine tours"
+        ],
+        totalCost: "1,000 GBP to 1,700 GBP per couple"
+    };
+
+    var proposals = [
+        mallorca,
+        corsica,
+        croatia
+    ];
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            selected: proposals[0],
+            proposals: proposals
+        },
+        methods: {
+            select(proposal) {
+                this.selected = proposal;
+            },
+            goTo(url) {
+                window.location.href = url;
+            }
+        }
+    })
+</script>
 
 </body>
 </html>
